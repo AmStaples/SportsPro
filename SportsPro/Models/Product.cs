@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,16 +8,18 @@ namespace SportsPro.Models
     {
 		public int ProductID { get; set; }
 
-		[Required]
+		[Required(ErrorMessage = "Please enter a product code.")]
 		public string ProductCode { get; set; }
 
-		[Required]
+		[Required(ErrorMessage = "Please enter a name.")]
 		public string Name { get; set; }
 
-		[Range(0, 1000000)]
+		[Required(ErrorMessage = "Please enter a yearly price.")]
+		[Range(0, 1000000, ErrorMessage = "Please enter a yearly price between $0 and $1,000,000.")]
 		[Column(TypeName = "decimal(8,2)")]
 		public decimal YearlyPrice { get; set; }
 
+		[Required(ErrorMessage = "Please enter a release date.")]
 		public DateTime ReleaseDate { get; set; } = DateTime.Now;
 	}
 }
