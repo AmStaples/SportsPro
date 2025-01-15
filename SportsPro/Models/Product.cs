@@ -15,9 +15,9 @@ namespace SportsPro.Models
 		public string Name { get; set; }
 
 		[Required(ErrorMessage = "Please enter a yearly price.")]
-		[Range(0, 1000000, ErrorMessage = "Please enter a yearly price between $0 and $1,000,000.")]
+		[Range(0.01, 1000000, ErrorMessage = "Please enter a yearly price between $0.01 and $1,000,000.")]
 		[Column(TypeName = "decimal(8,2)")]
-		public decimal YearlyPrice { get; set; }
+		public decimal? YearlyPrice { get; set; } = 0;
 
 		[Required(ErrorMessage = "Please enter a release date.")]
 		public DateTime ReleaseDate { get; set; } = DateTime.Now;

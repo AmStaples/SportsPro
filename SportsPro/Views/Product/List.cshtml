@@ -23,7 +23,7 @@
                 <tr>
                     <td>@product.ProductCode</td>
                     <td>@product.Name</td>
-                    <td>@product.YearlyPrice.ToString("c")</td>
+                    <td>@product.YearlyPrice?.ToString("c")</td>
                     <td>@product.ReleaseDate.ToString("d")</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@product.ProductID" class="btn btn-primary">Edit</a>
