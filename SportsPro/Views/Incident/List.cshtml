@@ -1,0 +1,35 @@
+﻿@model List<Incident>
+@{
+    ViewData["Title"] = "Incident Manager";
+}
+
+<h2>Incident Manager</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Date Opened</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.Title</td>
+                <td>@incident.Customer</td>
+                <td>@incident.Product</td>
+                <td>@incident.DateOpened.ToShortDateString()</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Incident", new { id = incident.Id })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete", "Incident", new { id = incident.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Add", "Incident")" class="btn btn-success">Add Incident</a>
