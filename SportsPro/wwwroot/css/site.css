@@ -29,3 +29,10 @@ body {
   white-space: nowrap;
   line-height: 40px; /* Vertically center the text there */
 }
+
+/* Colors
+-------------------------------------------------- */
+
+.bg-cyan {
+    background-color: #0dcaf0;
+}

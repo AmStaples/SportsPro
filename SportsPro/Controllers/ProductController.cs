@@ -36,6 +36,7 @@ namespace SportsPro.Controllers
             {
                 context.Products.Add(product);
                 context.SaveChanges();
+                TempData["message"] = $"{product.Name} was added.";
                 return RedirectToAction("List");
             }
             else
@@ -66,6 +67,7 @@ namespace SportsPro.Controllers
             {
                 context.Products.Update(product);
                 context.SaveChanges();
+                TempData["message"] = $"{product.Name} was edited.";
                 return RedirectToAction("List");
             }
             else
@@ -100,6 +102,7 @@ namespace SportsPro.Controllers
 
             context.Remove(product);
             context.SaveChanges();
+            TempData["message"] = $"{product.Name} was deleted.";
             return RedirectToAction("List");
         }
     }
