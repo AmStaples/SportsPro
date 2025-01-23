@@ -13,14 +13,12 @@
         <select asp-for="CustomerID" asp-items="ViewBag.Customers" class="form-control">
             <option value="">-- Select a Customer --</option>
         </select>
-        <span asp-validation-for="CustomerID" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="ProductID" class="form-label">Product</label>
         <select asp-for="ProductID" asp-items="ViewBag.Products" class="form-control">
             <option value="">-- Select a Product --</option>
         </select>
-        <span asp-validation-for="ProductID" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Title" class="form-label">Title</label>
@@ -35,7 +33,6 @@
         <select asp-for="TechnicianID" asp-items="ViewBag.Technicians" class="form-control">
             <option value="">-- Select a Technician --</option>
         </select>
-        <span asp-validation-for="TechnicianID" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="DateOpened" class="form-label">DateOpened</label>
