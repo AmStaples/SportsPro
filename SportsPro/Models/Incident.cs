@@ -27,6 +27,5 @@ namespace SportsPro.Models
 		public DateTime DateOpened { get; set; } = DateTime.Now;
 
 		public DateTime? DateClosed { get; set; } = null;
-
 	}
 }
