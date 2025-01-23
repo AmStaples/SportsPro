@@ -361,4 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/SportsPro/Migrations/20200130224714_Initial.cs
+Migrations/
