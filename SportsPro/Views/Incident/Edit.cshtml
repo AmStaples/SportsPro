@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Incident
 @{
+    ViewData["Title"] = "Incident Manager";
 }
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="@ViewBag.Mode" method="post">
+    <input asp-for="IncidentID" type="hidden" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="CustomerID" class="form-label">Customer</label>
+        <select asp-for="CustomerID" asp-items="ViewBag.Customers" class="form-control">
+            <option value="">-- Select a Customer --</option>
+        </select>
+        <span asp-validation-for="CustomerID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ProductID" class="form-label">Product</label>
+        <select asp-for="ProductID" asp-items="ViewBag.Products" class="form-control">
+            <option value="">-- Select a Product --</option>
+        </select>
+        <span asp-validation-for="ProductID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="TechnicianID" class="form-label">Technician</label>
+        <select asp-for="TechnicianID" asp-items="ViewBag.Technicians" class="form-control">
+            <option value="">-- Select a Technician --</option>
+        </select>
+        <span asp-validation-for="TechnicianID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateOpened" class="form-label">DateOpened</label>
+        <input asp-for="DateOpened" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateClosed" class="form-label">DateClosed</label>
+        <input asp-for="DateClosed" class="form-control" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="List" class="btn btn-primary">Cancel</a>
+    </div>
+</form>
