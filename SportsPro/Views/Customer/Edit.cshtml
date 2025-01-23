@@ -35,9 +35,9 @@
     <div class="mb-3">
         <label asp-for="CountryID" class="form-label">Country</label>
         <select asp-for="CountryID" class="form-control">
-            @foreach (SelectListItem c in ViewBag.Countries)
+            @foreach (Country c in ViewBag.Countries)
             {
-                <option value="@c.Value">@c.Text</option>
+                <option value="@c.CountryID">@c.Name</option>
             }
         </select>
     </div>

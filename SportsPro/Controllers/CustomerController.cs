@@ -27,12 +27,7 @@ namespace SportsPro.Controllers
         public IActionResult Add()
         {
             var countries = context.Countries.ToList();
-            List<SelectListItem> countryList = new List<SelectListItem> { };
-            foreach (Country c in countries)
-            {
-                countryList.Add(new SelectListItem {Value = c.CountryID, Text = c.Name});
-            }
-            ViewBag.Countries = countryList;
+            ViewBag.Countries = countries;
             ViewBag.Mode = "Add";
             return View("Edit");
         }
@@ -47,12 +42,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("List");
             } else {
                 var countries = context.Countries.ToList();
-                List<SelectListItem> countryList = new List<SelectListItem> { };
-                foreach (Country c in countries)
-                {
-                    countryList.Add(new SelectListItem { Value = c.CountryID, Text = c.Name });
-                }
-                ViewBag.Countries = countryList;
+                ViewBag.Countries = countries;
                 ViewBag.Mode = "Add";
                 return View("Edit", customer);
             }
@@ -62,12 +52,7 @@ namespace SportsPro.Controllers
         {
             var customer = context.Customers.Find(ID);
             var countries = context.Countries.ToList();
-            List<SelectListItem> countryList = new List<SelectListItem> { };
-            foreach (Country c in countries)
-            {
-                countryList.Add(new SelectListItem { Value = c.CountryID, Text = c.Name });
-            }
-            ViewBag.Countries = countryList;
+            ViewBag.Countries = countries;
             ViewBag.Mode = "Edit";
             return View(customer); 
         }
@@ -82,12 +67,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("List");
             } else {
                 var countries = context.Countries.ToList();
-                List<SelectListItem> countryList = new List<SelectListItem> { };
-                foreach (Country c in countries)
-                {
-                    countryList.Add(new SelectListItem { Value = c.CountryID, Text = c.Name });
-                }
-                ViewBag.Countries = countryList;
+                ViewBag.Countries = countries;
                 ViewBag.Mode = "Edit";
                 return View(customer);
             }
