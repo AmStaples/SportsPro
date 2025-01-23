@@ -12,6 +12,8 @@
             <th>Customer</th>
             <th>Product</th>
             <th>Date Opened</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +26,8 @@
                 <td>@incident.DateOpened.ToShortDateString()</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@incident.IncidentID" class="btn btn-primary">Edit</a>
+                </td>
+                <td>
                     <a asp-action="Delete" asp-route-id="@incident.IncidentID" class="btn btn-primary">Delete</a>
                 </td>
             </tr>
