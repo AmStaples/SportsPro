@@ -91,6 +91,12 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
+            var incidents = context.Incidents.Where(i => i.TechnicianID == technician.TechnicianID).ToList();
+            foreach (var incident in incidents)
+            {
+                incident.TechnicianID = null;
+                context.Update(incident);
+            }
             context.Remove(technician);
             context.SaveChanges();
             return RedirectToAction("List");
