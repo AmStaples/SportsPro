@@ -25,7 +25,7 @@ namespace SportsPro.Models
 		[Required]
 		public string PostalCode { get; set; }
 
-		[Required]
+		[Required(ErrorMessage = "The Country field is required.")]
 		public string CountryID { get; set; }
 		public Country Country { get; set; }
 
