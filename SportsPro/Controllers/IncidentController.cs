@@ -15,7 +15,7 @@ namespace SportsPro.Controllers
             context = ctx;
         }
 
-        [Route("incidents")]
+        [Route("[controller]s")]
         [HttpGet]
         public ViewResult List()
         {
