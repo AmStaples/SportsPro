@@ -5,7 +5,7 @@ namespace SportsPro.Models
 {
     public class Customer
     {
-		public int CustomerID { get; set; }
+		public int? CustomerID { get; set; }
 
 		[Required]
 		public string FirstName { get; set; }
