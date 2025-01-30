@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace SportsPro.Controllers
 {
-    public class ProductController : Controller
+    public class TechnicianController : Controller
     {
         private SportsProContext context { get; set; }
 
-        public ProductController(SportsProContext ctx)
+        public TechnicianController(SportsProContext ctx)
         {
             context = ctx;
         }
@@ -17,89 +17,88 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ViewResult List()
         {
-            var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
-            return View(products);
+            var technicians = context.Technicians.OrderBy(t => t.Name).ToList();
+            return View(technicians);
         }
 
         [HttpGet]
         public ViewResult Add()
         {
-            var product = new Product();
-            product.ReleaseDate = product.ReleaseDate.AddMilliseconds(-product.ReleaseDate.Millisecond);
+            var technician = new Technician();
             ViewBag.Mode = "Add";
-            return View("Edit", product);
+            return View("Edit", technician);
         }
 
         [HttpPost]
-        public ActionResult Add(Product product)
+        public ActionResult Add(Technician technician)
         {
             if (ModelState.IsValid)
             {
-                context.Products.Add(product);
+                context.Technicians.Add(technician);
                 context.SaveChanges();
                 return RedirectToAction("List");
             }
             else
             {
                 ViewBag.Mode = "Add";
-                return View("Edit", product);
+                return View("Edit", technician);
             }
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var product = context.Products.Find(id);
-
-            if (product == null)
+            var technician = context.Technicians.Find(id);
+            if (technician == null)
             {
                 return NotFound();
             }
-
             ViewBag.Mode = "Edit";
-            return View(product);
+            return View(technician);
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product)
+        public ActionResult Edit(Technician technician)
         {
             if (ModelState.IsValid)
             {
-                context.Products.Update(product);
+                context.Technicians.Update(technician);
                 context.SaveChanges();
                 return RedirectToAction("List");
             }
             else
             {
                 ViewBag.Mode = "Edit";
-                return View(product);
+                return View(technician);
             }
         }
 
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var product = context.Products.Find(id);
-
-            if (product == null)
+            var technician = context.Technicians.Find(id);
+            if (technician == null)
             {
                 return NotFound();
             }
-
-            return View(product);
+            return View(technician);
         }
 
         [HttpPost]
-        public ActionResult Delete(Product product)
+        public ActionResult Delete(Technician technician)
         {
-            product = context.Products.Find(product.ProductID);
-
-            if (product == null)
+            technician = context.Technicians.Find(technician.TechnicianID);
+            if (technician == null)
             {
                 return NotFound();
             }
-
-            context.Remove(product);
+            var incidents = context.Incidents.Where(i => i.TechnicianID == technician.TechnicianID).ToList();
+            foreach (var incident in incidents)
+            {
+                incident.TechnicianID = null;
+                context.Update(incident);
+            }
+            context.Remove(technician);
             context.SaveChanges();
             return RedirectToAction("List");
         }
