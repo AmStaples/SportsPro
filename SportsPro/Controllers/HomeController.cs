@@ -11,6 +11,7 @@ namespace SportsPro.Controllers
             return View();
         }
 
+        [Route("[action]")]
         public IActionResult About()
         {
             return View();
