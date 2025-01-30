@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace SportsPro.Controllers
 {
@@ -17,15 +17,33 @@ namespace SportsPro.Controllers
 
         [Route("[controller]s")]
         [HttpGet]
-        public ViewResult List()
+        public ViewResult List(string filter)
         {
-            var incidents = context.Incidents
-            .Include(i => i.Customer) 
-            .Include(i => i.Product) 
-            .OrderBy(i => i.IncidentID)
-            .ToList();
-            return View(incidents);
+            IQueryable<Incident> incidentsQuery = context.Incidents
+                .Include(i => i.Customer)
+                .Include(i => i.Product)
+                .OrderBy(i => i.IncidentID);
+
+            if (filter == "Unassigned")
+            {
+                incidentsQuery = incidentsQuery.Where(i => i.TechnicianID == null);
+            }
+            else if (filter == "Open")
+            {
+                incidentsQuery = incidentsQuery.Where(i => i.DateClosed == null);
+            }
+
+            var incidents = incidentsQuery.ToList();
+
+            var viewModel = new IncidentListViewModel
+            {
+                Incidents = incidents,
+                Filter = filter
+            };
+
+            return View(viewModel);
         }
+
 
         [HttpGet]
         public ViewResult Add()
@@ -61,9 +79,17 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Mode = "Edit";
             PopulateDropdowns();
-            return View(incident);
+            var viewModel = new IncidentEditViewModel
+            {
+                Incident = incident,
+                Customers = context.Customers.ToList(),
+                Products = context.Products.ToList(),
+                Technicians = context.Technicians.ToList(),
+                Mode = "Edit"
+
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -120,7 +146,7 @@ namespace SportsPro.Controllers
                 .Select(c => new
                 {
                     c.CustomerID,
-                    FullName = c.FirstName + " " + c.LastName 
+                    FullName = c.FirstName + " " + c.LastName
                 })
                 .OrderBy(c => c.FullName)
                 .ToList();
@@ -147,6 +173,3 @@ namespace SportsPro.Controllers
         }
     }
 }
-
-
-
