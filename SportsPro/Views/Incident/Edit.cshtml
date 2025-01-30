@@ -7,41 +7,41 @@
 <h1>@ViewData["Title"]</h1>
 
 <form asp-action="@Model.Mode" method="post">
-    <input asp-for="Incident.IncidentID" type="hidden" />
+    <input asp-for="@Model.Incident.IncidentID" type="hidden" />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
-        <label asp-for="Incident.CustomerID" class="form-label">Customer</label>
-        <select asp-for="Incident.CustomerID" asp-items="Model.Customers" class="form-control">
+        <label asp-for="@Model.Incident.CustomerID" class="form-label">Customer</label>
+        <select asp-for="@Model.Incident.CustomerID" asp-items="@(new SelectList(Model.Customers, "CustomerID", "FullName"))" class="form-control">
             <option value="">-- Select a Customer --</option>
         </select>
     </div>
     <div class="mb-3">
-        <label asp-for="Incident.ProductID" class="form-label">Product</label>
-        <select asp-for="Incident.ProductID" asp-items="Model.Products" class="form-control">
+        <label asp-for="@Model.Incident.ProductID" class="form-label">Product</label>
+        <select asp-for="@Model.Incident.ProductID" asp-items="@(new SelectList(Model.Products, "ProductID", "Name"))" class="form-control">
             <option value="">-- Select a Product --</option>
         </select>
     </div>
     <div class="mb-3">
-        <label asp-for="Incident.Title" class="form-label">Title</label>
-        <input asp-for="Incident.Title" class="form-control" />
+        <label asp-for="@Model.Incident.Title" class="form-label">Title</label>
+        <input asp-for="@Model.Incident.Title" class="form-control" />
     </div>
     <div class="mb-3">
-        <label asp-for="Incident.Description" class="form-label">Description</label>
-        <input asp-for="Incident.Description" class="form-control" />
+        <label asp-for="@Model.Incident.Description" class="form-label">Description</label>
+        <input asp-for="@Model.Incident.Description" class="form-control" />
     </div>
     <div class="mb-3">
-        <label asp-for="Incident.TechnicianID" class="form-label">Technician</label>
-        <select asp-for="Incident.TechnicianID" asp-items="Model.Technicians" class="form-control">
+        <label asp-for="@Model.Incident.TechnicianID" class="form-label">Technician</label>
+        <select asp-for="@Model.Incident.TechnicianID" asp-items="@(new SelectList(Model.Technicians, "TechnicianID", "Name"))" class="form-control">
             <option value="">-- Select a Technician --</option>
         </select>
     </div>
     <div class="mb-3">
-        <label asp-for="Incident.DateOpened" class="form-label">DateOpened</label>
-        <input asp-for="Incident.DateOpened" class="form-control" />
+        <label asp-for="@Model.Incident.DateOpened" class="form-label">DateOpened</label>
+        <input asp-for="@Model.Incident.DateOpened" class="form-control" />
     </div>
     <div class="mb-3">
-        <label asp-for="Incident.DateClosed" class="form-label">DateClosed</label>
-        <input asp-for="Incident.DateClosed" class="form-control" />
+        <label asp-for="@Model.Incident.DateClosed" class="form-label">DateClosed</label>
+        <input asp-for="@Model.Incident.DateClosed" class="form-control" />
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Save</button>

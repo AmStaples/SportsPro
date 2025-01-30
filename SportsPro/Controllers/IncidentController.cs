@@ -78,9 +78,17 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Mode = "Edit";
             PopulateDropdowns();
-            return View(incident);
+            var viewModel = new IncidentEditViewModel
+            {
+                Incident = incident,
+                Customers = context.Customers.ToList(),
+                Products = context.Products.ToList(),
+                Technicians = context.Technicians.ToList(),
+                Mode = "Edit"
+
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
