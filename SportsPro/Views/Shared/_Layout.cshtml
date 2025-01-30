@@ -1,10 +1,6 @@
 ﻿@{
     string controller = ViewContext.RouteData.Values["controller"].ToString();
     string action = ViewContext.RouteData.Values["action"].ToString();
-    @section scripts {
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +33,7 @@
                     <a class="nav-item nav-link @(controller == "Technician" ? "active" : "")" asp-controller="Technician" asp-action="List">Technicians</a>
                     <a class="nav-item nav-link @(controller == "Customer" ? "active" : "")" asp-controller="Customer" asp-action="List">Customers</a>
                     <a class="nav-item nav-link @(controller == "Incident" ? "active" : "")" asp-controller="Incident" asp-action="List">Incidents</a>
-                    <a class="nav-item nav-link @(controller == "Regisration" ? "active" : "")" asp-controller="Registration" asp-action="GetCustomer">Registrations</a>
+                    <a class="nav-item nav-link @(controller == "Registration" ? "active" : "")" asp-controller="Registration" asp-action="GetCustomer">Registrations</a>
                 </div>
                 <div class="navbar-nav navbar-right">
                     <a class="nav-item nav-link @(controller == "Home" && action == "About" ? "active" : "")" asp-controller="Home" asp-action="About">About</a>
