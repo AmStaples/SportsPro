@@ -1,0 +1,27 @@
+﻿@model Technician
+@{
+    ViewData["Title"] = ViewBag.Mode + " Technician";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="@ViewBag.Mode" method="post">
+    <input asp-for="TechnicianID" type="hidden" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Phone</label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="List" class="btn btn-primary">Cancel</a>
+    </div>
+</form>
