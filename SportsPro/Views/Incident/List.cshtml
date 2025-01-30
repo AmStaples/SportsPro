@@ -1,9 +1,19 @@
-﻿@model List<Incident>
+﻿@model SportsPro.Models.IncidentListViewModel
 @{
     ViewData["Title"] = "Incident Manager";
 }
 
 <h2>Incident Manager</h2>
+
+<form method="get">
+    <div class="mb-3">
+    <select name="filter" class="form-control" onchange="this.form.submit()">
+        <!option value="" @(string.IsNullOrEmpty(Model.Filter) ? "selected" : "")>-- Select Filter --</!option>
+        <!option value="Unassigned" @(Model.Filter == "Unassigned" ? "selected" : "")>Unassigned</!option>
+        <!option value="Open" @(Model.Filter == "Open" ? "selected" : "")>Open</!option>
+    </select>
+    </div>
+</form>
 
 <table class="table table-striped table-bordered">
     <thead>
@@ -17,7 +27,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var incident in Model)
+        @foreach (var incident in Model.Incidents)
         {
             <tr>
                 <td>@incident.Title</td>
@@ -36,3 +46,6 @@
 </table>
 
 <a class="btn btn-primary" asp-controller="Incident" asp-action="Add">Add Incident</a>
+
+
+

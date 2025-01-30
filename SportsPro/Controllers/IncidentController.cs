@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace SportsPro.Controllers
 {
@@ -16,15 +16,33 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet]
-        public ViewResult List()
+        public ViewResult List(string filter)
         {
-            var incidents = context.Incidents
-            .Include(i => i.Customer) 
-            .Include(i => i.Product) 
-            .OrderBy(i => i.IncidentID)
-            .ToList();
-            return View(incidents);
+            IQueryable<Incident> incidentsQuery = context.Incidents
+                .Include(i => i.Customer)
+                .Include(i => i.Product)
+                .OrderBy(i => i.IncidentID);
+
+            if (filter == "Unassigned")
+            {
+                incidentsQuery = incidentsQuery.Where(i => i.TechnicianID == null);
+            }
+            else if (filter == "Open")
+            {
+                incidentsQuery = incidentsQuery.Where(i => i.DateClosed == null);
+            }
+
+            var incidents = incidentsQuery.ToList();
+
+            var viewModel = new IncidentListViewModel
+            {
+                Incidents = incidents,
+                Filter = filter
+            };
+
+            return View(viewModel);
         }
+
 
         [HttpGet]
         public ViewResult Add()
@@ -119,7 +137,7 @@ namespace SportsPro.Controllers
                 .Select(c => new
                 {
                     c.CustomerID,
-                    FullName = c.FirstName + " " + c.LastName 
+                    FullName = c.FirstName + " " + c.LastName
                 })
                 .OrderBy(c => c.FullName)
                 .ToList();
@@ -146,6 +164,3 @@ namespace SportsPro.Controllers
         }
     }
 }
-
-
-
