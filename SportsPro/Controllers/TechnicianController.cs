@@ -13,6 +13,7 @@ namespace SportsPro.Controllers
             context = ctx;
         }
 
+        [Route("technicians")]
         [HttpGet]
         public ViewResult List()
         {
