@@ -1,0 +1,42 @@
+﻿@model TechIncidentViewModel
+
+<h2>Technician: @Model.Technician.Name</h2>
+
+@if (Model.Incidents.Any())
+{
+    <h3>Assigned/Open Incidents</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Date Opened</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var incident in Model.Incidents)
+            {
+                <tr>
+                    <td>@incident.Title</td>
+                    <td>@incident.Customer.FullName</td>
+                    <td>@incident.Product.Name</td>
+                    <td>@incident.DateOpened.ToShortDateString()</td>
+                    <td>
+                        <a asp-controller="TechIncident" asp-action="Edit" asp-route-id="@incident.IncidentID"
+                           class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No open incidents assigned to this technician.
+    </div>
+}
+
+<a asp-controller="TechIncident" asp-action="SelectTechnician" class="btn btn-secondary">Switch Technician</a>
