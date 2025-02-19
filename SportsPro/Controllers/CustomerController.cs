@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SportsPro.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SportsPro.Controllers
@@ -14,6 +12,37 @@ namespace SportsPro.Controllers
         public CustomerController(SportsProContext ctx)
         {
             context = ctx;
+        }
+
+        public JsonResult CheckEmail(string email, string customerId)
+        {
+            var id = 0;
+            int.TryParse(customerId, out id);
+
+            bool emailExists = context.Customers.Any(
+                c => c.Email == email && c.CustomerID != id);
+            
+            if (emailExists)
+            {
+                return Json("Email address already in use.");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
+        [NonAction]
+        private void ValidateEmail(Customer customer)
+        {
+            var duplicateExists = context.Customers.Any(c =>
+                c.Email == customer.Email && c.CustomerID != customer.CustomerID);
+
+            if (duplicateExists)
+            {
+                ModelState.AddModelError(
+                    nameof(Customer.Email), "Email address already in use.");
+            }
         }
 
         [Route("[controller]s")]
@@ -36,6 +65,8 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Add(Customer customer)
         {
+            ValidateEmail(customer);
+
             if (ModelState.IsValid)
             {
                 context.Customers.Add(customer);
@@ -61,6 +92,8 @@ namespace SportsPro.Controllers
         [HttpPost] //Edit an existing Entry
         public IActionResult Edit(Customer customer)
         {
+            ValidateEmail(customer);
+
             if (ModelState.IsValid)
             {
                 context.Customers.Update(customer);
