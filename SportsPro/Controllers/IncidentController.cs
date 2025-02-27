@@ -49,10 +49,18 @@ namespace SportsPro.Controllers
         public ViewResult Add()
         {
             var incident = new Incident();
-            ViewBag.Mode = "Add";
-            PopulateDropdowns();
-            return View("Edit", incident);
+            var viewModel = new IncidentEditViewModel
+            {
+                Incident = incident,
+                Mode = "Add",
+                Customers = context.Customers.ToList(),
+                Products = context.Products.ToList(),
+                Technicians = context.Technicians.ToList()
+            };
+
+            return View("Edit", viewModel);
         }
+
 
         [HttpPost]
         public ActionResult Add(Incident incident)
