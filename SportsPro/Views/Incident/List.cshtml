@@ -3,17 +3,16 @@
     ViewData["Title"] = "Incident Manager";
 }
 
-<h2>Incident Manager</h2>
+<h1>Incident Manager</h1>
 
-<form method="get">
-    <div class="mb-3">
-    <select name="filter" class="form-control" onchange="this.form.submit()">
-        <!option value="" @(string.IsNullOrEmpty(Model.Filter) ? "selected" : "")>-- Select Filter --</!option>
-        <!option value="Unassigned" @(Model.Filter == "Unassigned" ? "selected" : "")>Unassigned</!option>
-        <!option value="Open" @(Model.Filter == "Open" ? "selected" : "")>Open</!option>
-    </select>
-    </div>
-</form>
+<div class="mb-3">
+    <a asp-action="List" asp-route-filter=""
+       class="btn @(string.IsNullOrEmpty(Model.Filter) ? "btn-primary" : "btn-light border-0")">All incidents</a>
+    <a asp-action="List" asp-route-filter="Unassigned"
+       class="btn @(Model.Filter == "Unassigned" ? "btn-primary" : "btn-light border-0")">Unassigned incidents</a>
+    <a asp-action="List" asp-route-filter="Open"
+       class="btn @(Model.Filter == "Open" ? "btn-primary" : "btn-light border-0")">Open incidents</a>
+</div>
 
 <table class="table table-striped table-bordered">
     <thead>
@@ -46,6 +45,16 @@
 </table>
 
 <a class="btn btn-primary" asp-controller="Incident" asp-action="Add">Add Incident</a>
+
+<footer class="mt-4">
+    <p>&copy; 2022 - SportsPro</p>
+</footer>
+
+
+
+
+
+
 
 
 
