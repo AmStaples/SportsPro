@@ -72,7 +72,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Edit(int id) {
             int? techID = HttpContext.Session.GetInt32(Tech_ID);
-            var technician = context.Technicians.Find(id);
+            var technician = context.Technicians.Find(techID);
             if (techID == null)
             {
                 TempData["message"] = "Please select a technician!";
