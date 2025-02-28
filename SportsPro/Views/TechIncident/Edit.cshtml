@@ -1,0 +1,54 @@
+﻿@model SportsPro.Models.TechIncidentViewModel
+
+@{
+    ViewData["Title"] = "Edit Incident";
+}
+
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="row mb-3">
+        <label class="form-label">Technician: </label>
+        <div class="col">
+            <label>@Model.Technician.Name</label>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="form-label">Customer: </label>
+        <div class="col">
+            <label>@Model.Incident.Customer.FullName</label>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="form-label">Product: </label>
+        <div class="col">
+            <label>@Model.Incident.Product.Name</label>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="form-label">Title: </label>
+        <div class="col">
+            <label>@Model.Incident.Title</label>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="form-label">Date Opened: </label>
+        <div class="col">
+            <label>@Model.Incident.DateOpened</label>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Incident.Description" class="form-label">Description: </label>
+        <input asp-for="Incident.Description" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Incident.DateClosed" class="form-label">Date Closed: </label>
+        <input asp-for="Incident.DateClosed" class="form-control" />
+    </div>
+    <input asp-for="Incident.IncidentID" type="hidden" />
+</form>
