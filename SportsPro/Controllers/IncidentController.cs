@@ -3,6 +3,7 @@ using SportsPro.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using SportsPro.Models.DataLayer;
 
 namespace SportsPro.Controllers
 {
