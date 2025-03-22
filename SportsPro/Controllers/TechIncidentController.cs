@@ -14,10 +14,10 @@ namespace SportsPro.Controllers
         private Repository<Technician> technicians { get; set; }
         private Repository<Incident> incidents { get; set; }
 
-        public TechIncidentController(Repository<Technician> technicians, Repository<Incident> incidents)
+        public TechIncidentController(SportsProContext context)
         {
-            this.technicians = technicians;
-            this.incidents = incidents;
+            technicians = new Repository<Technician>(context);
+            incidents = new Repository<Incident>(context);
         }
 
         [HttpGet]

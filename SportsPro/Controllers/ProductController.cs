@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 using SportsPro.Models.DataLayer;
-using System.Linq;
 
 namespace SportsPro.Controllers
 {
@@ -9,9 +8,9 @@ namespace SportsPro.Controllers
     {
         private Repository<Product> products { get; set; }
 
-        public ProductController(Repository<Product> products)
+        public ProductController(SportsProContext context)
         {
-            this.products = products;
+            products = new Repository<Product>(context);
         }
 
         [Route("[controller]s")]

@@ -10,10 +10,10 @@ namespace SportsPro.Controllers
         private Repository<Technician> technicians { get; set; }
         private Repository<Incident> incidents { get; set; }
 
-        public TechnicianController(Repository<Technician> technicians, Repository<Incident> incidents)
+        public TechnicianController(SportsProContext context)
         {
-            this.technicians = technicians;
-            this.incidents = incidents;
+            technicians = new Repository<Technician>(context);
+            incidents = new Repository<Incident>(context);
         }
 
         [Route("[controller]s")]

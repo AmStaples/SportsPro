@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 using SportsPro.Models.DataLayer;
-using System.Linq;
 
 namespace SportsPro.Controllers
 {
@@ -11,40 +10,20 @@ namespace SportsPro.Controllers
         private Repository<Customer> customers { get; set; }
         private Repository<Country> countries { get; set; }
 
-        public CustomerController(Repository<Customer> customers, Repository<Country> countries)
+        public CustomerController(SportsProContext context)
         {
-            this.customers = customers;
-            this.countries = countries;
-        }
-
-        public JsonResult CheckEmail(string email, string customerId)
-        {
-            var id = 0;
-            int.TryParse(customerId, out id);
-
-            bool emailExists = context.Customers.Any(
-                c => c.Email == email && c.CustomerID != id);
-            
-            if (emailExists)
-            {
-                return Json("Email address already in use.");
-            }
-            else
-            {
-                return Json(true);
-            }
+            customers = new Repository<Customer>(context);
+            countries = new Repository<Country>(context);
         }
 
         [NonAction]
         private void ValidateEmail(Customer customer)
         {
-            var duplicateExists = context.Customers.Any(c =>
-                c.Email == customer.Email && c.CustomerID != customer.CustomerID);
+            string error = Check.EmailExists(customer.Email, (int)customer.CustomerID);
 
-            if (duplicateExists)
+            if (!string.IsNullOrEmpty(error))
             {
-                ModelState.AddModelError(
-                    nameof(Customer.Email), "Email address already in use.");
+                ModelState.AddModelError(nameof(Customer.Email), error);
             }
         }
 
@@ -84,9 +63,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet] //Load page to Edit an existing Entry
-        public IActionResult Edit(int ID)
+        public IActionResult Edit(int Id)
         {
-            var customer = this.customers.Get(ID);
+            var customer = customers.Get(Id);
             var countries = this.countries.List(new QueryOptions<Country>());
             ViewBag.Countries = countries;
             ViewBag.Mode = "Edit";
@@ -103,7 +82,9 @@ namespace SportsPro.Controllers
                 customers.Update(customer);
                 customers.Save();
                 return RedirectToAction("List");
-            } else {
+            }
+            else
+            {
                 var countries = this.countries.List(new QueryOptions<Country>());
                 ViewBag.Countries = countries;
                 ViewBag.Mode = "Edit";

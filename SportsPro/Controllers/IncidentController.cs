@@ -15,13 +15,12 @@ namespace SportsPro.Controllers
         private Repository<Product> products { get; set; }
         private Repository<Technician> technicians { get; set; }
 
-        public IncidentController(Repository<Incident> incidents, Repository<Customer> customers,
-            Repository<Product> products, Repository<Technician> technicians)
+        public IncidentController(SportsProContext context)
         {
-            this.incidents = incidents;
-            this.customers = customers;
-            this.products = products;
-            this.technicians = technicians;
+            incidents = new Repository<Incident>(context);
+            customers = new Repository<Customer>(context);
+            products = new Repository<Product>(context);
+            technicians = new Repository<Technician>(context);
         }
 
         [Route("[controller]s")]
