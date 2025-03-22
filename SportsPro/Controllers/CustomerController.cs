@@ -19,7 +19,7 @@ namespace SportsPro.Controllers
         [NonAction]
         private void ValidateEmail(Customer customer)
         {
-            string error = Check.EmailExists(customer.Email, (int)customer.CustomerID);
+            string error = Check.EmailExists(customers, customer.Email, customer.CustomerID ?? 0);
 
             if (!string.IsNullOrEmpty(error))
             {

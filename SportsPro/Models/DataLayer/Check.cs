@@ -4,13 +4,10 @@ namespace SportsPro.Models.DataLayer
 {
     public static class Check
     {
-        public static Repository<Customer> customers;
-
-        public static string EmailExists(string email, int customerId)
+        public static string EmailExists(Repository<Customer> customers, string email, int customerId)
         {
             var queryOptions = new QueryOptions<Customer>();
             queryOptions.Where = c =>
-                c.Email.Trim() != "" &&
                 c.Email == email &&
                 c.CustomerID != customerId;
 

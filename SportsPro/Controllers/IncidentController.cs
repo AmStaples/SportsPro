@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
 using SportsPro.Models.DataLayer;
 using System.Collections.Generic;
 
