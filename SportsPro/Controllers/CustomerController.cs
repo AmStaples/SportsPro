@@ -8,11 +8,13 @@ namespace SportsPro.Controllers
     public class CustomerController : Controller
     {
 
-        private SportsProContext context { get; set; }
+        private Repository<Customer> customers { get; set; }
+        private Repository<Country> countries { get; set; }
 
-        public CustomerController(SportsProContext ctx)
+        public CustomerController(Repository<Customer> customers, Repository<Country> countries)
         {
-            context = ctx;
+            this.customers = customers;
+            this.countries = countries;
         }
 
         public JsonResult CheckEmail(string email, string customerId)
@@ -50,14 +52,14 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var customers = context.Customers.ToList();
+            var customers = this.customers.List(new QueryOptions<Customer>());
             return View(customers); 
         }
 
         [HttpGet] 
         public IActionResult Add()
         {
-            var countries = context.Countries.ToList();
+            var countries = this.countries.List(new QueryOptions<Country>());
             ViewBag.Countries = countries;
             ViewBag.Mode = "Add";
             return View("Edit");
@@ -70,21 +72,22 @@ namespace SportsPro.Controllers
 
             if (ModelState.IsValid)
             {
-                context.Customers.Add(customer);
-                context.SaveChanges();
+                customers.Insert(customer);
+                customers.Save();
                 return RedirectToAction("List");
             } else {
-                var countries = context.Countries.ToList();
+                var countries = this.countries.List(new QueryOptions<Country>());
                 ViewBag.Countries = countries;
                 ViewBag.Mode = "Add";
                 return View("Edit", customer);
             }
         }
+
         [HttpGet] //Load page to Edit an existing Entry
         public IActionResult Edit(int ID)
         {
-            var customer = context.Customers.Find(ID);
-            var countries = context.Countries.ToList();
+            var customer = this.customers.Get(ID);
+            var countries = this.countries.List(new QueryOptions<Country>());
             ViewBag.Countries = countries;
             ViewBag.Mode = "Edit";
             return View(customer); 
@@ -97,33 +100,33 @@ namespace SportsPro.Controllers
 
             if (ModelState.IsValid)
             {
-                context.Customers.Update(customer);
-                context.SaveChanges();
+                customers.Update(customer);
+                customers.Save();
                 return RedirectToAction("List");
             } else {
-                var countries = context.Countries.ToList();
+                var countries = this.countries.List(new QueryOptions<Country>());
                 ViewBag.Countries = countries;
                 ViewBag.Mode = "Edit";
                 return View(customer);
             }
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var customer = customers.Get(id);
+            if (customer == null) { return NotFound(); }
+            return View(customer);
+        }
+
         [HttpPost]
         public IActionResult Delete(Customer customer)
         {
-            customer = context.Customers.Find(customer.CustomerID);
-            if (customer == null) { return NotFound(); }
-            context.Customers.Remove(customer);
-            context.SaveChanges();
+            customer = customers.Get((int) customer.CustomerID);
+            if (customer == null) return NotFound();
+            customers.Delete(customer);
+            customers.Save();
             return RedirectToAction("List");
-        }
-
-        [HttpGet]
-        public  IActionResult Delete(int id)
-        {
-            var customer = context.Customers.Find(id);
-            if (customer == null) { return NotFound(); }
-            return View(customer);
         }
     }
 }

@@ -4,37 +4,44 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using SportsPro.Models.DataLayer;
+using System.Collections.Generic;
 
 namespace SportsPro.Controllers
 {
     public class IncidentController : Controller
     {
-        private SportsProContext context { get; set; }
+        private Repository<Incident> incidents { get; set; }
+        private Repository<Customer> customers { get; set; }
+        private Repository<Product> products { get; set; }
+        private Repository<Technician> technicians { get; set; }
 
-        public IncidentController(SportsProContext ctx)
+        public IncidentController(Repository<Incident> incidents, Repository<Customer> customers,
+            Repository<Product> products, Repository<Technician> technicians)
         {
-            context = ctx;
+            this.incidents = incidents;
+            this.customers = customers;
+            this.products = products;
+            this.technicians = technicians;
         }
 
         [Route("[controller]s")]
         [HttpGet]
         public ViewResult List(string filter)
         {
-            IQueryable<Incident> incidentsQuery = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .OrderBy(i => i.IncidentID);
+            var queryOptions = new QueryOptions<Incident>();
+            queryOptions.Includes = "Customer, Product";
+            queryOptions.OrderBy = i => i.IncidentID;
 
             if (filter == "Unassigned")
             {
-                incidentsQuery = incidentsQuery.Where(i => i.TechnicianID == null);
+                queryOptions.Where = i => i.TechnicianID == null;
             }
             else if (filter == "Open")
             {
-                incidentsQuery = incidentsQuery.Where(i => i.DateClosed == null);
+                queryOptions.Where = i => i.DateClosed == null;
             }
 
-            var incidents = incidentsQuery.ToList();
+            var incidents = (List<Incident>) this.incidents.List(queryOptions);
 
             var viewModel = new IncidentListViewModel
             {
@@ -54,9 +61,9 @@ namespace SportsPro.Controllers
             {
                 Incident = incident,
                 Mode = "Add",
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
+                Customers = (List<Customer>) customers.List(new QueryOptions<Customer>()),
+                Products = (List<Product>) products.List(new QueryOptions<Product>()),
+                Technicians = (List<Technician>) technicians.List(new QueryOptions<Technician>())
             };
 
             return View("Edit", viewModel);
@@ -68,8 +75,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Incidents.Add(incident);
-                context.SaveChanges();
+                incidents.Insert(incident);
+                incidents.Save();
                 return RedirectToAction("List");
             }
             else
@@ -83,7 +90,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var incident = context.Incidents.Find(id);
+            var incident = incidents.Get(id);
             if (incident == null)
             {
                 return NotFound();
@@ -92,9 +99,9 @@ namespace SportsPro.Controllers
             var viewModel = new IncidentEditViewModel
             {
                 Incident = incident,
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList(),
+                Customers = (List<Customer>) customers.List(new QueryOptions<Customer>()),
+                Products = (List<Product>) products.List(new QueryOptions<Product>()),
+                Technicians = (List<Technician>) technicians.List(new QueryOptions<Technician>()),
                 Mode = "Edit"
 
             };
@@ -106,8 +113,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Incidents.Update(incident);
-                context.SaveChanges();
+                incidents.Update(incident);
+                incidents.Save();
                 return RedirectToAction("List");
             }
             else
@@ -121,7 +128,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var incident = context.Incidents.Find(id);
+            var incident = incidents.Get(id);
             if (incident == null)
             {
                 return NotFound();
@@ -132,13 +139,13 @@ namespace SportsPro.Controllers
         [HttpPost]
         public ActionResult Delete(Incident incident)
         {
-            incident = context.Incidents.Find(incident.IncidentID);
+            incident = incidents.Get(incident.IncidentID);
             if (incident == null)
             {
                 return NotFound();
             }
-            context.Remove(incident);
-            context.SaveChanges();
+            incidents.Delete(incident);
+            incidents.Save();
             return RedirectToAction("List");
         }
 
@@ -151,32 +158,30 @@ namespace SportsPro.Controllers
 
         private SelectList GetCustomers()
         {
-            var customers = context.Customers
-                .Select(c => new
-                {
-                    c.CustomerID,
-                    FullName = c.FirstName + " " + c.LastName
-                })
-                .OrderBy(c => c.FullName)
-                .ToList();
+            var queryOptions = new QueryOptions<Customer>();
+            queryOptions.OrderBy = c => c.FirstName + " " + c.LastName;
+
+            var customers = this.customers.List(queryOptions);
 
             return new SelectList(customers, "CustomerID", "FullName");
         }
 
         private SelectList GetProducts()
         {
-            var products = context.Products
-                .OrderBy(p => p.Name)
-                .ToList();
+            var queryOptions = new QueryOptions<Product>();
+            queryOptions.OrderBy = p => p.Name;
+
+            var products = this.products.List(queryOptions);
 
             return new SelectList(products, "ProductID", "Name");
         }
 
         private SelectList GetTechnicians()
         {
-            var technicians = context.Technicians
-                .OrderBy(t => t.Name)
-                .ToList();
+            var queryOptions = new QueryOptions<Technician>();
+            queryOptions.OrderBy = t => t.Name;
+
+            var technicians = this.technicians.List(queryOptions);
 
             return new SelectList(technicians, "TechnicianID", "Name");
         }

@@ -7,18 +7,21 @@ namespace SportsPro.Controllers
 {
     public class ProductController : Controller
     {
-        private SportsProContext context { get; set; }
+        private Repository<Product> products { get; set; }
 
-        public ProductController(SportsProContext ctx)
+        public ProductController(Repository<Product> products)
         {
-            context = ctx;
+            this.products = products;
         }
 
         [Route("[controller]s")]
         [HttpGet]
         public ViewResult List()
         {
-            var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
+            var queryOptions = new QueryOptions<Product>();
+            queryOptions.OrderBy = p => p.ReleaseDate;
+
+            var products = this.products.List(queryOptions);
             return View(products);
         }
 
@@ -36,8 +39,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Products.Add(product);
-                context.SaveChanges();
+                products.Insert(product);
+                products.Save();
                 TempData["message"] = $"{product.Name} was added.";
                 return RedirectToAction("List");
             }
@@ -51,7 +54,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var product = context.Products.Find(id);
+            var product = products.Get(id);
 
             if (product == null)
             {
@@ -67,8 +70,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Products.Update(product);
-                context.SaveChanges();
+                products.Update(product);
+                products.Save();
                 TempData["message"] = $"{product.Name} was edited.";
                 return RedirectToAction("List");
             }
@@ -82,7 +85,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var product = context.Products.Find(id);
+            var product = products.Get(id);
 
             if (product == null)
             {
@@ -95,15 +98,15 @@ namespace SportsPro.Controllers
         [HttpPost]
         public ActionResult Delete(Product product)
         {
-            product = context.Products.Find(product.ProductID);
+            product = products.Get(product.ProductID);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            context.Remove(product);
-            context.SaveChanges();
+            products.Delete(product);
+            products.Save();
             TempData["message"] = $"{product.Name} was deleted.";
             return RedirectToAction("List");
         }
