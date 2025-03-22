@@ -66,7 +66,7 @@ namespace SportsPro.Controllers
             {
                 var queryOptions = new QueryOptions<Incident>();
                 queryOptions.Includes = "Customer, Product";
-                queryOptions.Where = i=> i.TechnicianID == id && i.DateClosed == null;
+                queryOptions.Where = i => i.TechnicianID == id && i.DateClosed == null;
                 queryOptions.OrderBy = i => i.DateOpened;
 
                 var incidents = (List<Incident>)this.incidents.List(queryOptions);
