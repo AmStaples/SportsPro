@@ -38,7 +38,7 @@ namespace SportsPro.Controllers
                 queryOptions.Where = i => i.DateClosed == null;
             }
 
-            var incidents = (List<Incident>) this.incidents.List(queryOptions);
+            var incidents = (List<Incident>)this.incidents.List(queryOptions);
 
             var viewModel = new IncidentListViewModel
             {
@@ -58,9 +58,9 @@ namespace SportsPro.Controllers
             {
                 Incident = incident,
                 Mode = "Add",
-                Customers = (List<Customer>) customers.List(new QueryOptions<Customer>()),
-                Products = (List<Product>) products.List(new QueryOptions<Product>()),
-                Technicians = (List<Technician>) technicians.List(new QueryOptions<Technician>())
+                Customers = (List<Customer>)customers.List(new QueryOptions<Customer>()),
+                Products = (List<Product>)products.List(new QueryOptions<Product>()),
+                Technicians = (List<Technician>)technicians.List(new QueryOptions<Technician>())
             };
 
             return View("Edit", viewModel);
@@ -96,9 +96,9 @@ namespace SportsPro.Controllers
             var viewModel = new IncidentEditViewModel
             {
                 Incident = incident,
-                Customers = (List<Customer>) customers.List(new QueryOptions<Customer>()),
-                Products = (List<Product>) products.List(new QueryOptions<Product>()),
-                Technicians = (List<Technician>) technicians.List(new QueryOptions<Technician>()),
+                Customers = (List<Customer>)customers.List(new QueryOptions<Customer>()),
+                Products = (List<Product>)products.List(new QueryOptions<Product>()),
+                Technicians = (List<Technician>)technicians.List(new QueryOptions<Technician>()),
                 Mode = "Edit"
 
             };

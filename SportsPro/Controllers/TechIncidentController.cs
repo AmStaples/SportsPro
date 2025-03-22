@@ -69,10 +69,12 @@ namespace SportsPro.Controllers
                 queryOptions.Where = i=> i.TechnicianID == id && i.DateClosed == null;
                 queryOptions.OrderBy = i => i.DateOpened;
 
+                var incidents = (List<Incident>)this.incidents.List(queryOptions);
+
                 var model = new TechIncidentViewModel
                 {
                     Technician = technician,
-                    Incidents = (List<Incident>)incidents.List(queryOptions)
+                    Incidents = incidents
                 };
                 return View(model);
             }
@@ -93,31 +95,42 @@ namespace SportsPro.Controllers
                 return NotFound();
             }
 
-            else
+            var queryOptions = new QueryOptions<Incident>();
+            queryOptions.Includes = "Customer, Product";
+            queryOptions.Where = i => i.IncidentID == id;
+
+            var incident = incidents.List(queryOptions).FirstOrDefault();
+            if (incident == null)
             {
-                var queryOptions = new QueryOptions<Incident>();
-                queryOptions.Includes = "Customer, Product";
-                queryOptions.Where = i => i.IncidentID == id;
-
-                var incident = incidents.List(queryOptions).FirstOrDefault();
-
-                var model = new TechIncidentViewModel
-                {
-                    Technician = technician,
-                    Incident = incident
-                };
-                return View(model);
+                return NotFound();
             }
+
+            var model = new TechIncidentViewModel
+            {
+                Technician = technician,
+                Incident = incident
+            };
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Edit(TechIncidentViewModel model)
         {
-            Incident i = incidents.Get(model.Incident.IncidentID);
-            i.Description = model.Incident.Description;
-            i.DateClosed = model.Incident.DateClosed;
+            if (model.Incident.IncidentID == 0)
+            {
+                return NotFound();
+            }
 
-            incidents.Update(i);
+            Incident incident = incidents.Get(model.Incident.IncidentID);
+            if (incident == null)
+            {
+                return NotFound();
+            }
+
+            incident.Description = model.Incident.Description;
+            incident.DateClosed = model.Incident.DateClosed;
+
+            incidents.Update(incident);
             incidents.Save();
 
             int? techID = HttpContext.Session.GetInt32(Tech_ID);

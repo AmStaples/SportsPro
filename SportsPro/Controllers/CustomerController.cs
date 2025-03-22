@@ -55,8 +55,7 @@ namespace SportsPro.Controllers
                 customers.Save();
                 return RedirectToAction("List");
             } else {
-                var countries = this.countries.List(new QueryOptions<Country>());
-                ViewBag.Countries = countries;
+                ViewBag.Countries = countries.List(new QueryOptions<Country>());
                 ViewBag.Mode = "Add";
                 return View("Edit", customer);
             }
@@ -66,8 +65,7 @@ namespace SportsPro.Controllers
         public IActionResult Edit(int Id)
         {
             var customer = customers.Get(Id);
-            var countries = this.countries.List(new QueryOptions<Country>());
-            ViewBag.Countries = countries;
+            ViewBag.Countries = countries.List(new QueryOptions<Country>());
             ViewBag.Mode = "Edit";
             return View(customer); 
         }
@@ -85,8 +83,7 @@ namespace SportsPro.Controllers
             }
             else
             {
-                var countries = this.countries.List(new QueryOptions<Country>());
-                ViewBag.Countries = countries;
+                ViewBag.Countries = countries.List(new QueryOptions<Country>());
                 ViewBag.Mode = "Edit";
                 return View(customer);
             }
@@ -96,14 +93,14 @@ namespace SportsPro.Controllers
         public IActionResult Delete(int id)
         {
             var customer = customers.Get(id);
-            if (customer == null) { return NotFound(); }
+            if (customer == null) return NotFound();
             return View(customer);
         }
 
         [HttpPost]
         public IActionResult Delete(Customer customer)
         {
-            customer = customers.Get((int) customer.CustomerID);
+            customer = customers.Get(customer.CustomerID ?? 0);
             if (customer == null) return NotFound();
             customers.Delete(customer);
             customers.Save();
