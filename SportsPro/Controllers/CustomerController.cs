@@ -38,8 +38,7 @@ namespace SportsPro.Controllers
         [HttpGet] 
         public IActionResult Add()
         {
-            var countries = this.countries.List(new QueryOptions<Country>());
-            ViewBag.Countries = countries;
+            ViewBag.Countries = countries.List(new QueryOptions<Country>());
             ViewBag.Mode = "Add";
             return View("Edit");
         }
