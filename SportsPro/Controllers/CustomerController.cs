@@ -54,7 +54,9 @@ namespace SportsPro.Controllers
                 customers.Insert(customer);
                 customers.Save();
                 return RedirectToAction("List");
-            } else {
+            }
+            else
+            {
                 ViewBag.Countries = countries.List(new QueryOptions<Country>());
                 ViewBag.Mode = "Add";
                 return View("Edit", customer);
@@ -65,6 +67,7 @@ namespace SportsPro.Controllers
         public IActionResult Edit(int Id)
         {
             var customer = customers.Get(Id);
+            if (customer == null) return NotFound();
             ViewBag.Countries = countries.List(new QueryOptions<Country>());
             ViewBag.Mode = "Edit";
             return View(customer); 
@@ -73,6 +76,10 @@ namespace SportsPro.Controllers
         [HttpPost] //Edit an existing Entry
         public IActionResult Edit(Customer customer)
         {
+            var id = customer.CustomerID ?? 0;
+            var doesNotExist = customers.Get(id) == null;
+            if (doesNotExist) return NotFound();
+
             ValidateEmail(customer);
 
             if (ModelState.IsValid)
