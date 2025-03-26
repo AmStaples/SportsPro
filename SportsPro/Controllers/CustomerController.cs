@@ -75,10 +75,6 @@ namespace SportsPro.Controllers
         [HttpPost] //Edit an existing Entry
         public IActionResult Edit(Customer customer)
         {
-            var id = customer.CustomerID ?? 0;
-            var doesNotExist = customers.Get(id) == null;
-            if (doesNotExist) return NotFound();
-
             ValidateEmail(customer);
 
             if (ModelState.IsValid)
