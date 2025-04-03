@@ -1,6 +1,6 @@
-﻿@model ProductEditViewModel
+﻿@model Product
 @{
-    ViewData["Title"] = Model.Mode + " Product";
+    ViewData["Title"] = ViewBag.Mode + " Product";
     @section scripts {
         <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
@@ -11,7 +11,7 @@
 
 <form asp-action="Save" method="post">
     <input asp-for="ProductID" type="hidden" />
-    <input asp-for="Mode" type="hidden"/>
+    <input value="Mode" dirname="Mode" value="@ViewBag.Mode" type="hidden"/>
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="ProductCode" class="form-label">Code</label>

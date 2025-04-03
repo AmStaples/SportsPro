@@ -30,8 +30,8 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ViewResult Add()
         {
-            var product = new ProductEditViewModel();
-            product.Mode = "Add";
+            var product = new Product();
+            ViewBag.Mode = "Add";
             product.ReleaseDate = product.ReleaseDate.AddMilliseconds(-product.ReleaseDate.Millisecond);
             return View("Edit", product);
         }
@@ -119,7 +119,7 @@ namespace SportsPro.Controllers
         public ActionResult Edit(int id)
         {
             var product = _productRepository.Get(id);
-            ProductEditViewModel viewModel = new ProductEditViewModel();
+            Product viewModel = new Product();
             
             
             if (product == null)
@@ -131,7 +131,7 @@ namespace SportsPro.Controllers
             viewModel.Name = product.Name;
             viewModel.YearlyPrice = product.YearlyPrice;
             viewModel.ReleaseDate = product.ReleaseDate;
-            viewModel.Mode = "Edit";
+            ViewBag.Mode = "Edit";
             return View(viewModel);
         }
 

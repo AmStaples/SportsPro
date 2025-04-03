@@ -144,10 +144,10 @@ namespace SportsPro.Tests
         [Fact]
         public void Save_ReturnsViewResultIfModelStateIsInvalid()
         {
-            var product = new Product { ProductID = 1, Name = "New Product" };
+            var product = new ProductEditViewModel { ProductID = 1, Name = "New Product" };
             _controller.ModelState.AddModelError("Name", "Required");
 
-            var result = _controller.Add(product) as ViewResult;
+            var result = _controller.Save(product) as ViewResult;
 
             Assert.NotNull(result);
             Assert.IsType<ViewResult>(result);
