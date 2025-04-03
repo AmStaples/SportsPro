@@ -7,13 +7,13 @@ namespace SportsPro.Controllers
     public class CustomerController : Controller
     {
 
-        private Repository<Customer> customers { get; set; }
-        private Repository<Country> countries { get; set; }
+        private IRepository<Customer> customers { get; set; }
+        private IRepository<Country> countries { get; set; }
 
-        public CustomerController(SportsProContext context)
+        public CustomerController(IRepository<Customer> cuRep, IRepository<Country> coRep)
         {
-            customers = new Repository<Customer>(context);
-            countries = new Repository<Country>(context);
+            customers = cuRep;
+            countries = coRep;
         }
 
         [NonAction]

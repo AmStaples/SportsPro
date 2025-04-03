@@ -9,7 +9,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form asp-action="@Model.Mode" method="post">
+<form asp-action="Save" method="post">
     <input asp-for="ProductID" type="hidden" />
     <input asp-for="Mode" type="hidden"/>
     <div asp-validation-summary="All" class="text-danger"></div>
