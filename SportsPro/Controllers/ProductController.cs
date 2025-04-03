@@ -6,23 +6,26 @@ namespace SportsPro.Controllers
 {
     public class ProductController : Controller
     {
-        private Repository<Product> products { get; set; }
+        private IRepository<Product> _productRepository;
 
-        public ProductController(SportsProContext context)
+        public ProductController(IRepository<Product> productRepository)
         {
-            products = new Repository<Product>(context);
+            _productRepository = productRepository;
         }
 
         [Route("[controller]s")]
         [HttpGet]
         public ViewResult List()
         {
-            var queryOptions = new QueryOptions<Product>();
-            queryOptions.OrderBy = p => p.ReleaseDate;
+            var queryOptions = new QueryOptions<Product>
+            {
+                OrderBy = p => p.ReleaseDate
+            };
 
-            var products = this.products.List(queryOptions);
+            var products = _productRepository.List(queryOptions);
             return View(products);
         }
+
 
         [HttpGet]
         public ViewResult Add()
@@ -38,8 +41,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                products.Insert(product);
-                products.Save();
+                _productRepository.Insert(product);
+                _productRepository.Save();
                 TempData["message"] = $"{product.Name} was added.";
                 return RedirectToAction("List");
             }
@@ -53,13 +56,11 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var product = products.Get(id);
-
+            var product = _productRepository.Get(id);
             if (product == null)
             {
                 return NotFound();
             }
-
             ViewBag.Mode = "Edit";
             return View(product);
         }
@@ -69,8 +70,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                products.Update(product);
-                products.Save();
+                _productRepository.Update(product);
+                _productRepository.Save();
                 TempData["message"] = $"{product.Name} was edited.";
                 return RedirectToAction("List");
             }
@@ -84,28 +85,24 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var product = products.Get(id);
-
+            var product = _productRepository.Get(id);
             if (product == null)
             {
                 return NotFound();
             }
-
             return View(product);
         }
 
         [HttpPost]
         public ActionResult Delete(Product product)
         {
-            product = products.Get(product.ProductID);
-
+            product = _productRepository.Get(product.ProductID);
             if (product == null)
             {
                 return NotFound();
             }
-
-            products.Delete(product);
-            products.Save();
+            _productRepository.Delete(product);
+            _productRepository.Save();
             TempData["message"] = $"{product.Name} was deleted.";
             return RedirectToAction("List");
         }
