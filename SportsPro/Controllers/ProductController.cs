@@ -36,22 +36,84 @@ namespace SportsPro.Controllers
             return View("Edit", product);
         }
 
+        //[HttpPost]
+        //public ActionResult Add(Product product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _productRepository.Insert(product);
+        //        _productRepository.Save();
+        //        TempData["message"] = $"{product.Name} was added.";
+        //        return RedirectToAction("List");
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Mode = "Add";
+        //        return View("Edit", product);
+        //    }
+        //}
+
         [HttpPost]
-        public ActionResult Add(Product product)
+        public ActionResult Save(ProductEditViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _productRepository.Insert(product);
-                _productRepository.Save();
-                TempData["message"] = $"{product.Name} was added.";
-                return RedirectToAction("List");
-            }
+           if(model.Mode == "Edit")
+            { 
+                if(ModelState.IsValid)
+                {
+                    Product product = new Product();
+                    product.ProductID = model.ProductID;
+                    product.ProductCode = model.ProductCode;
+                    product.Name = model.Name;
+                    product.YearlyPrice = model.YearlyPrice;
+                    product.ReleaseDate = model.ReleaseDate;
+
+                    _productRepository.Update(product);
+                    _productRepository.Save();
+                    TempData["message"] = $"{product.Name} was edited.";
+                    return RedirectToAction("List");
+                } 
+                else
+                {
+                    return View("Edit", model);
+                }
+            } 
             else
             {
-                ViewBag.Mode = "Add";
-                return View("Edit", product);
+                if(ModelState.IsValid)
+                {
+                    Product product = new Product();
+                    product.ProductCode = model.ProductCode;
+                    product.Name = model.Name;
+                    product.YearlyPrice = model.YearlyPrice;
+                    product.ReleaseDate = model.ReleaseDate;
+
+                    _productRepository.Insert(product);
+                    _productRepository.Save();
+                    TempData["message"] = $"{product.Name} was added.";
+                    return RedirectToAction("List");
+                }
+                else
+                {
+                    return View("Edit", model);
+                }
             }
         }
+        //[HttpPost]
+        //public ActionResult Edit(Product product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _productRepository.Update(product);
+        //        _productRepository.Save();
+        //        TempData["message"] = $"{product.Name} was edited.";
+        //        return RedirectToAction("List");
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Mode = "Edit";
+        //        return View(product);
+        //    }
+        //}
 
         [HttpGet]
         public ActionResult Edit(int id)
@@ -65,22 +127,7 @@ namespace SportsPro.Controllers
             return View(product);
         }
 
-        [HttpPost]
-        public ActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _productRepository.Update(product);
-                _productRepository.Save();
-                TempData["message"] = $"{product.Name} was edited.";
-                return RedirectToAction("List");
-            }
-            else
-            {
-                ViewBag.Mode = "Edit";
-                return View(product);
-            }
-        }
+
 
         [HttpGet]
         public ActionResult Delete(int id)

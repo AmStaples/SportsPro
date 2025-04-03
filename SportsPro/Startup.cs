@@ -27,7 +27,8 @@ namespace SportsPro
 
             services.AddControllersWithViews();
 
-            services.AddScoped<IRepository<Customer>, Repository<Customer>>();
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<SportsProContext>(options =>
                 options.UseSqlServer(
