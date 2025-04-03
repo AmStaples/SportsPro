@@ -26,7 +26,7 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public ViewResult Index()
         {
             var queryOptions = new QueryOptions<Technician>
             {

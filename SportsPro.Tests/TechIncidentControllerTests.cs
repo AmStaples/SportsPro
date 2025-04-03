@@ -35,11 +35,19 @@ namespace SportsPro.Tests
                 _httpContextMock.Object);
         }
 
-        //[Fact]
-        //public void Index_ModelIsATechnicianObject()
-        //{
-            
-        //}
+        [Fact]
+        public void Index_ModelIsATechnicianObject()
+        {
+            var controller = new TechIncidentController(
+                new Mock<IRepository<Technician>>().Object,
+                new Mock<IRepository<Incident>>().Object,
+                new Mock<IHttpContextAccessor> { DefaultValue = DefaultValue.Mock }.Object
+            );
+
+            var model = controller.Index().ViewData.Model;
+
+            Assert.IsType<Technician>(model);
+        }
 
         [Fact]
         public void List_GET_ReturnsAViewResult()
