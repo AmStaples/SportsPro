@@ -6,13 +6,13 @@ namespace SportsPro.Controllers
 {
     public class TechnicianController : Controller
     {
-        private Repository<Technician> technicians { get; set; }
-        private Repository<Incident> incidents { get; set; }
+        private IRepository<Technician> technicians { get; set; }
+        private IRepository<Incident> incidents { get; set; }
 
-        public TechnicianController(SportsProContext context)
+        public TechnicianController(IRepository<Technician> tRep, IRepository<Incident> iRep)
         {
-            technicians = new Repository<Technician>(context);
-            incidents = new Repository<Incident>(context);
+            technicians = tRep;
+            incidents = iRep;
         }
 
         [Route("[controller]s")]

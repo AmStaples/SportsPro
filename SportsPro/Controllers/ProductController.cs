@@ -6,11 +6,11 @@ namespace SportsPro.Controllers
 {
     public class ProductController : Controller
     {
-        private Repository<Product> products { get; set; }
+        private IRepository<Product> products { get; set; }
 
-        public ProductController(SportsProContext context)
+        public ProductController(IRepository<Product> rep)
         {
-            products = new Repository<Product>(context);
+            products = rep;
         }
 
         [Route("[controller]s")]

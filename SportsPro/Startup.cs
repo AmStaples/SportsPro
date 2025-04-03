@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models.DataLayer;
+using Microsoft.AspNetCore.Http;
 
 namespace SportsPro
 {
@@ -33,6 +34,9 @@ namespace SportsPro
                 options.LowercaseUrls = true;
                 options.AppendTrailingSlash = true;
             });
+
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // Use this method to configure the HTTP request pipeline.

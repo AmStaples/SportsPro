@@ -11,13 +11,15 @@ namespace SportsPro.Controllers
     {
         private const string Tech_ID = "techID";
 
-        private Repository<Technician> technicians { get; set; }
-        private Repository<Incident> incidents { get; set; }
+        private IRepository<Technician> technicians { get; set; }
+        private IRepository<Incident> incidents { get; set; }
+        private IHttpContextAccessor accessor { get; set; }
 
-        public TechIncidentController(SportsProContext context)
+        public TechIncidentController(IRepository<Technician> tRep, IRepository<Incident> iRep, IHttpContextAccessor accessor)
         {
-            technicians = new Repository<Technician>(context);
-            incidents = new Repository<Incident>(context);
+            technicians = tRep;
+            incidents = iRep;
+            this.accessor = accessor;
         }
 
         [HttpGet]
@@ -31,7 +33,7 @@ namespace SportsPro.Controllers
 
             var technician = new Technician();
 
-            int? techID = HttpContext.Session.GetInt32(Tech_ID);
+            int? techID = accessor.HttpContext.Session.GetInt32(Tech_ID);
             if (techID != null) {
                 technician = technicians.Get((int)techID);
             }
@@ -48,7 +50,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
             else {
-                HttpContext.Session.SetInt32(Tech_ID, technician.TechnicianID);
+                accessor.HttpContext.Session.SetInt32(Tech_ID, technician.TechnicianID);
                 return RedirectToAction("List", new { id = technician.TechnicianID });
             }
         }
@@ -82,7 +84,7 @@ namespace SportsPro.Controllers
 
         [HttpGet]
         public IActionResult Edit(int id) {
-            int? techID = HttpContext.Session.GetInt32(Tech_ID);
+            int? techID = accessor.HttpContext.Session.GetInt32(Tech_ID);
             if (techID == null)
             {
                 TempData["message"] = "Please select a technician!";
@@ -133,7 +135,7 @@ namespace SportsPro.Controllers
             incidents.Update(incident);
             incidents.Save();
 
-            int? techID = HttpContext.Session.GetInt32(Tech_ID);
+            int? techID = accessor.HttpContext.Session.GetInt32(Tech_ID);
             return RedirectToAction("List", new { id = techID });
         }
     }

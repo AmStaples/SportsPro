@@ -8,17 +8,17 @@ namespace SportsPro.Controllers
 {
     public class IncidentController : Controller
     {
-        private Repository<Incident> incidents { get; set; }
-        private Repository<Customer> customers { get; set; }
-        private Repository<Product> products { get; set; }
-        private Repository<Technician> technicians { get; set; }
+        private IRepository<Incident> incidents { get; set; }
+        private IRepository<Customer> customers { get; set; }
+        private IRepository<Product> products { get; set; }
+        private IRepository<Technician> technicians { get; set; }
 
-        public IncidentController(SportsProContext context)
+        public IncidentController(IRepository<Incident> iRep, IRepository<Customer> cRep, IRepository<Product> pRep, IRepository<Technician> tRep)
         {
-            incidents = new Repository<Incident>(context);
-            customers = new Repository<Customer>(context);
-            products = new Repository<Product>(context);
-            technicians = new Repository<Technician>(context);
+            incidents = iRep;
+            customers = cRep;
+            products = pRep;
+            technicians = tRep;
         }
 
         [Route("[controller]s")]
