@@ -126,13 +126,8 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            viewModel.ProductID = product.ProductID;
-            viewModel.ProductCode = product.ProductCode;
-            viewModel.Name = product.Name;
-            viewModel.YearlyPrice = product.YearlyPrice;
-            viewModel.ReleaseDate = product.ReleaseDate;
             ViewBag.Mode = "Edit";
-            return View(viewModel);
+            return View(product);
         }
 
 
