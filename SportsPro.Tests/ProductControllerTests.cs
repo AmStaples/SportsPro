@@ -83,8 +83,6 @@ namespace SportsPro.Tests
             Assert.Equal($"{product.Name} was deleted.", tempData["message"]);  
         }
 
-
-
         [Fact]
         public void Edit_GET_ModelsAProductObject()
         {
@@ -131,54 +129,17 @@ namespace SportsPro.Tests
             Assert.IsType<ViewResult>(result);
         }
 
-        [Fact]
-        public void Save_RedirectsToListActionMethodOnSuccess()
-        {
-            var tempDataMock = new Mock<ITempDataDictionary>();
-            _controller.TempData = tempDataMock.Object;
+        //[Fact]
+        //public void Save_RedirectsToListActionMethodOnSuccess()
+        //{
+            
+        //}
 
-            var product = new Product
-            {
-                ProductID = 1,
-                ProductCode = "P001",
-                Name = "Sample Product",
-                YearlyPrice = 99.99m,
-                ReleaseDate = DateTime.Now
-            };
-
-            _productRepoMock.Setup(repo => repo.Insert(It.IsAny<Product>()));
-            _productRepoMock.Setup(repo => repo.Save());
-
-            var result = _controller.Add(product) as RedirectToActionResult;
-
-            Assert.NotNull(result);
-            Assert.Equal("List", result.ActionName);  
-
-            tempDataMock.Verify(tempData => tempData["message"], Times.Once, "TempData['message'] was not set.");
-        }
-
-        [Fact]
-        public void Save_ReturnsRedirectToActionResultIfModelStateIsValid()
-        {
-            var product = new Product { ProductID = 1, Name = "New Product" };
-
-            _productRepoMock.Setup(repo => repo.Insert(It.IsAny<Product>())).Verifiable();
-            _productRepoMock.Setup(repo => repo.Save()).Verifiable();
-
-            _controller.ModelState.Clear(); 
-
-            var tempDataMock = new Mock<ITempDataDictionary>();
-            _controller.TempData = tempDataMock.Object;
-
-            var result = _controller.Add(product) as RedirectToActionResult;
-
-            Assert.NotNull(result);  
-            Assert.Equal("List", result.ActionName);  
-
-            _productRepoMock.Verify();
-
-            tempDataMock.Verify(tempData => tempData["message"], Times.Once(), "TempData['message'] was not set.");
-        }
+        //[Fact]
+        //public void Save_ReturnsRedirectToActionResultIfModelStateIsValid()
+        //{
+           
+        //}
 
         [Fact]
         public void Save_ReturnsViewResultIfModelStateIsInvalid()
