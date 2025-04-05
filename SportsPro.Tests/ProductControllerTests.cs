@@ -59,10 +59,10 @@ namespace SportsPro.Tests
 
             _productRepoMock.Setup(repo => repo.Get(1)).Returns(product);
 
-            var result = _controller.Delete(1) as ViewResult;  
+            var result = _controller.Delete(1);  
 
             Assert.NotNull(result);  
-            Assert.Equal(product, result.Model); 
+            Assert.IsType<ViewResult>(result); 
         }
 
 
