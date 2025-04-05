@@ -7,6 +7,7 @@ using SportsPro.Models;
 using SportsPro.Models.DataLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SportsPro.Tests
 {
@@ -129,17 +130,37 @@ namespace SportsPro.Tests
             Assert.IsType<ViewResult>(result);
         }
 
-        //[Fact]
-        //public void Save_RedirectsToListActionMethodOnSuccess()
-        //{
-            
-        //}
+        [Fact]
+        public void Save_RedirectsToListActionMethodOnSuccess()
+        {
+            var product = new ProductEditViewModel { ProductID = 1, Name = "New Product" };
 
-        //[Fact]
-        //public void Save_ReturnsRedirectToActionResultIfModelStateIsValid()
-        //{
-           
-        //}
+            var tempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
+            _controller.TempData = tempData;
+
+            var result = _controller.Save(product) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal("List", result.ActionName);
+        }
+
+
+        [Fact]
+        public void Save_ReturnsRedirectToActionResultIfModelStateIsValid()
+        {
+            var product = new ProductEditViewModel { ProductID = 1, Name = "New Product" };
+
+            var tempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
+            _controller.TempData = tempData;
+
+            _controller.ModelState.Clear();
+
+            var result = _controller.Save(product) as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.IsType<RedirectToActionResult>(result);
+
+        }
 
         [Fact]
         public void Save_ReturnsViewResultIfModelStateIsInvalid()
