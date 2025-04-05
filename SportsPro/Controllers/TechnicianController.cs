@@ -1,23 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
-using System.Linq;
+using SportsPro.Models.DataLayer;
 
 namespace SportsPro.Controllers
 {
     public class TechnicianController : Controller
     {
-        private SportsProContext context { get; set; }
+        private Repository<Technician> technicians { get; set; }
+        private Repository<Incident> incidents { get; set; }
 
-        public TechnicianController(SportsProContext ctx)
+        public TechnicianController(SportsProContext context)
         {
-            context = ctx;
+            technicians = new Repository<Technician>(context);
+            incidents = new Repository<Incident>(context);
         }
 
         [Route("[controller]s")]
         [HttpGet]
         public ViewResult List()
         {
-            var technicians = context.Technicians.OrderBy(t => t.Name).ToList();
+            var queryOptions = new QueryOptions<Technician>();
+            queryOptions.OrderBy = t => t.Name;
+
+            var technicians = this.technicians.List(queryOptions);
             return View(technicians);
         }
 
@@ -34,8 +39,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Technicians.Add(technician);
-                context.SaveChanges();
+                technicians.Insert(technician);
+                technicians.Save();
                 return RedirectToAction("List");
             }
             else
@@ -48,7 +53,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var technician = context.Technicians.Find(id);
+            var technician = technicians.Get(id);
             if (technician == null)
             {
                 return NotFound();
@@ -62,8 +67,8 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                context.Technicians.Update(technician);
-                context.SaveChanges();
+                technicians.Update(technician);
+                technicians.Save();
                 return RedirectToAction("List");
             }
             else
@@ -76,7 +81,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
-            var technician = context.Technicians.Find(id);
+            var technician = technicians.Get(id);
             if (technician == null)
             {
                 return NotFound();
@@ -87,19 +92,25 @@ namespace SportsPro.Controllers
         [HttpPost]
         public ActionResult Delete(Technician technician)
         {
-            technician = context.Technicians.Find(technician.TechnicianID);
+            technician = technicians.Get(technician.TechnicianID);
             if (technician == null)
             {
                 return NotFound();
             }
-            var incidents = context.Incidents.Where(i => i.TechnicianID == technician.TechnicianID).ToList();
+
+            var queryOptions = new QueryOptions<Incident>();
+            queryOptions.Where = i => i.TechnicianID == technician.TechnicianID;
+
+            var incidents = this.incidents.List(queryOptions);
             foreach (var incident in incidents)
             {
                 incident.TechnicianID = null;
-                context.Update(incident);
+                this.incidents.Update(incident);
             }
-            context.Remove(technician);
-            context.SaveChanges();
+            this.incidents.Save();
+
+            technicians.Delete(technician);
+            technicians.Save();
             return RedirectToAction("List");
         }
     }

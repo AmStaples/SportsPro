@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SportsPro.Models;
-using System.Threading;
 
 namespace SportsPro.Controllers
 {

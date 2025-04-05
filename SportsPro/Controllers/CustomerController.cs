@@ -1,47 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
-using System.Linq;
+using SportsPro.Models.DataLayer;
 
 namespace SportsPro.Controllers
 {
     public class CustomerController : Controller
     {
 
-        private SportsProContext context { get; set; }
+        private Repository<Customer> customers { get; set; }
+        private Repository<Country> countries { get; set; }
 
-        public CustomerController(SportsProContext ctx)
+        public CustomerController(SportsProContext context)
         {
-            context = ctx;
-        }
-
-        public JsonResult CheckEmail(string email, string customerId)
-        {
-            var id = 0;
-            int.TryParse(customerId, out id);
-
-            bool emailExists = context.Customers.Any(
-                c => c.Email == email && c.CustomerID != id);
-            
-            if (emailExists)
-            {
-                return Json("Email address already in use.");
-            }
-            else
-            {
-                return Json(true);
-            }
+            customers = new Repository<Customer>(context);
+            countries = new Repository<Country>(context);
         }
 
         [NonAction]
         private void ValidateEmail(Customer customer)
         {
-            var duplicateExists = context.Customers.Any(c =>
-                c.Email == customer.Email && c.CustomerID != customer.CustomerID);
+            string error = Check.EmailExists(customers, customer.Email, customer.CustomerID ?? 0);
 
-            if (duplicateExists)
+            if (!string.IsNullOrEmpty(error))
             {
-                ModelState.AddModelError(
-                    nameof(Customer.Email), "Email address already in use.");
+                ModelState.AddModelError(nameof(Customer.Email), error);
             }
         }
 
@@ -49,15 +31,14 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var customers = context.Customers.ToList();
+            var customers = this.customers.List(new QueryOptions<Customer>());
             return View(customers); 
         }
 
         [HttpGet] 
         public IActionResult Add()
         {
-            var countries = context.Countries.ToList();
-            ViewBag.Countries = countries;
+            ViewBag.Countries = countries.List(new QueryOptions<Country>());
             ViewBag.Mode = "Add";
             return View("Edit");
         }
@@ -69,22 +50,24 @@ namespace SportsPro.Controllers
 
             if (ModelState.IsValid)
             {
-                context.Customers.Add(customer);
-                context.SaveChanges();
+                customers.Insert(customer);
+                customers.Save();
                 return RedirectToAction("List");
-            } else {
-                var countries = context.Countries.ToList();
-                ViewBag.Countries = countries;
+            }
+            else
+            {
+                ViewBag.Countries = countries.List(new QueryOptions<Country>());
                 ViewBag.Mode = "Add";
                 return View("Edit", customer);
             }
         }
+
         [HttpGet] //Load page to Edit an existing Entry
-        public IActionResult Edit(int ID)
+        public IActionResult Edit(int Id)
         {
-            var customer = context.Customers.Find(ID);
-            var countries = context.Countries.ToList();
-            ViewBag.Countries = countries;
+            var customer = customers.Get(Id);
+            if (customer == null) return NotFound();
+            ViewBag.Countries = countries.List(new QueryOptions<Country>());
             ViewBag.Mode = "Edit";
             return View(customer); 
         }
@@ -96,33 +79,34 @@ namespace SportsPro.Controllers
 
             if (ModelState.IsValid)
             {
-                context.Customers.Update(customer);
-                context.SaveChanges();
+                customers.Update(customer);
+                customers.Save();
                 return RedirectToAction("List");
-            } else {
-                var countries = context.Countries.ToList();
-                ViewBag.Countries = countries;
+            }
+            else
+            {
+                ViewBag.Countries = countries.List(new QueryOptions<Country>());
                 ViewBag.Mode = "Edit";
                 return View(customer);
             }
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var customer = customers.Get(id);
+            if (customer == null) return NotFound();
+            return View(customer);
+        }
+
         [HttpPost]
         public IActionResult Delete(Customer customer)
         {
-            customer = context.Customers.Find(customer.CustomerID);
-            if (customer == null) { return NotFound(); }
-            context.Customers.Remove(customer);
-            context.SaveChanges();
+            customer = customers.Get(customer.CustomerID ?? 0);
+            if (customer == null) return NotFound();
+            customers.Delete(customer);
+            customers.Save();
             return RedirectToAction("List");
-        }
-
-        [HttpGet]
-        public  IActionResult Delete(int id)
-        {
-            var customer = context.Customers.Find(id);
-            if (customer == null) { return NotFound(); }
-            return View(customer);
         }
     }
 }
