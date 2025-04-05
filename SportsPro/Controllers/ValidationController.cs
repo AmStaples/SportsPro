@@ -13,12 +13,12 @@ namespace SportsPro.Controllers
             customers = new Repository<Customer>(context);
         }
 
-        public JsonResult CheckEmail(string email, string customerId)
+        public JsonResult CheckEmail(string email, string customerId, [FromServices] IRepository<Customer> cRep)
         {
             int id = 0;
             int.TryParse(customerId, out id);
 
-            string error = Check.EmailExists(customers, email, id);
+            string error = Check.EmailExists(cRep, email, id);
 
             if (string.IsNullOrEmpty(error))
             {
