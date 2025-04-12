@@ -5,7 +5,7 @@ using SportsPro.Models.DataLayer;
 
 namespace SportsPro.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TechnicianController : Controller
     {
         private IRepository<Technician> technicians { get; set; }
