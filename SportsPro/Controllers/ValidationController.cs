@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 using SportsPro.Models.DataLayer;
 
 namespace SportsPro.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ValidationController : Controller
     {
         private Repository<Customer> customers;

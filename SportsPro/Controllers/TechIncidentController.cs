@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 using SportsPro.Models.DataLayer;
@@ -7,6 +8,7 @@ using System.Linq;
 
 namespace SportsPro.Controllers
 {
+    [Authorize]
     public class TechIncidentController : Controller
     {
         private const string Tech_ID = "techID";

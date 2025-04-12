@@ -3,9 +3,11 @@ using SportsPro.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SportsPro.Models.DataLayer;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SportsPro.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class IncidentController : Controller
     {
         private IRepository<Incident> incidents { get; set; }
