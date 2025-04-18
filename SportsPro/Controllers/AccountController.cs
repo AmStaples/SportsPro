@@ -54,9 +54,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet]
-        public IActionResult LogIn(string returnUrl = "")
+        public IActionResult LogIn(string returnURL = "")
         {
-            var model = new LoginViewModel { ReturnUrl = returnUrl };
+            var model = new LoginViewModel { ReturnUrl = returnURL };
             return View(model);
         }
 
