@@ -11,10 +11,10 @@ namespace SportsPro.Controllers
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
 
-        public AccountController(UserManager<User> userMgnr, SignInManager<User> signInMgnr)
+        public AccountController(UserManager<User> userMngr, SignInManager<User> signInMngr)
         {
-            userManager = userMgnr;
-            signInManager = signInMgnr;
+            userManager = userMngr;
+            signInManager = signInMngr;
         }
 
         [HttpGet]
