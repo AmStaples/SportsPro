@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <partial name="_JqueryLibraries.cshtml" />
     @RenderSection("scripts", false)
 </head>
 <body>
@@ -41,12 +40,10 @@
             </nav>
         </nav>
     </header>
+    <!-- Here-->
     <div class="container">
         <main role="main" class="pb-5">
-            @if (TempData.Keys.Contains("message"))
-            {
-                <h4 class="p-2 mt-3 rounded bg-cyan text-center text-white">@TempData["message"]</h4>
-            }
+            <temp-message></temp-message>
             @RenderBody()
         </main>
     </div>
