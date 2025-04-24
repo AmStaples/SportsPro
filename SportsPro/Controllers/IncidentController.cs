@@ -45,7 +45,7 @@ namespace SportsPro.Controllers
                 Incidents = incidents,
                 Filter = filter
             };
-
+            ViewBag.Filter = filter;
             return View(viewModel);
         }
 
