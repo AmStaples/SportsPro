@@ -1,13 +1,12 @@
 ﻿@model Incident
 @{
-    ViewData["Title"] = "Incident Manager";
+    ViewData["Title"] = "Delete Incident";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <form asp-action="Delete" method="post">
     <vc:confirm-deletion id="@Model.IncidentID" name="@Model.Title"></vc:confirm-deletion>
-    <p class="mb-3">Are you sure you want to delete the incident "@Model.Title"?</p>
     <div>
         <button type="submit" class="btn btn-primary">Delete</button>
         <a asp-action="List" class="btn btn-primary">Cancel</a>
