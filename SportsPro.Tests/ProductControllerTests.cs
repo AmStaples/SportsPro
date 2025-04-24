@@ -1,14 +1,10 @@
-﻿using Xunit;
-using Moq;
+﻿using Moq;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using SportsPro.Controllers;
 using SportsPro.Models;
 using SportsPro.Models.DataLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.CodeAnalysis;
 
 namespace SportsPro.Tests
 {
