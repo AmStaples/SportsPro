@@ -134,9 +134,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Incident incident)
+        public ActionResult Delete(ConfirmDeletionViewModel model)
         {
-            incident = incidents.Get(incident.IncidentID);
+            var incident = incidents.Get(model.Id);
             if (incident == null)
             {
                 return NotFound();
