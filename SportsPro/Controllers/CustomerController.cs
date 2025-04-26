@@ -52,6 +52,7 @@ namespace SportsPro.Controllers
             {
                 customers.Insert(customer);
                 customers.Save();
+                TempData["message"] = $"{customer.FullName} was added.";
                 return RedirectToAction("List");
             }
             else
@@ -81,6 +82,7 @@ namespace SportsPro.Controllers
             {
                 customers.Update(customer);
                 customers.Save();
+                TempData["message"] = $"{customer.FullName} was edited.";
                 return RedirectToAction("List");
             }
             else
@@ -100,12 +102,13 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(Customer customer)
+        public IActionResult Delete(ConfirmDeletionViewModel model)
         {
-            customer = customers.Get(customer.CustomerID ?? 0);
+            var customer = customers.Get(model.Id);
             if (customer == null) return NotFound();
             customers.Delete(customer);
             customers.Save();
+            TempData["message"] = $"{customer.FullName} was deleted.";
             return RedirectToAction("List");
         }
     }

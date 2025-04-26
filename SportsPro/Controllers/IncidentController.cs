@@ -45,7 +45,7 @@ namespace SportsPro.Controllers
                 Incidents = incidents,
                 Filter = filter
             };
-
+            ViewBag.Filter = filter;
             return View(viewModel);
         }
 
@@ -74,6 +74,7 @@ namespace SportsPro.Controllers
             {
                 incidents.Insert(incident);
                 incidents.Save();
+                TempData["message"] = $"{incident.Title} was added.";
                 return RedirectToAction("List");
             }
             else
@@ -112,6 +113,7 @@ namespace SportsPro.Controllers
             {
                 incidents.Update(incident);
                 incidents.Save();
+                TempData["message"] = $"{incident.Title} was edited.";
                 return RedirectToAction("List");
             }
             else
@@ -134,15 +136,16 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Incident incident)
+        public ActionResult Delete(ConfirmDeletionViewModel model)
         {
-            incident = incidents.Get(incident.IncidentID);
+            var incident = incidents.Get(model.Id);
             if (incident == null)
             {
                 return NotFound();
             }
             incidents.Delete(incident);
             incidents.Save();
+            TempData["message"] = $"{model.Name} was deleted.";
             return RedirectToAction("List");
         }
 

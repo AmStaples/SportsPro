@@ -41,6 +41,7 @@ namespace SportsPro.Controllers
             {
                 technicians.Insert(technician);
                 technicians.Save();
+                TempData["message"] = $"{technician.Name} was added.";
                 return RedirectToAction("List");
             }
             else
@@ -69,6 +70,7 @@ namespace SportsPro.Controllers
             {
                 technicians.Update(technician);
                 technicians.Save();
+                TempData["message"] = $"{technician.Name} was edited.";
                 return RedirectToAction("List");
             }
             else
@@ -90,9 +92,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Technician technician)
+        public ActionResult Delete(ConfirmDeletionViewModel model)
         {
-            technician = technicians.Get(technician.TechnicianID);
+            var technician = technicians.Get(model.Id);
             if (technician == null)
             {
                 return NotFound();
@@ -108,7 +110,7 @@ namespace SportsPro.Controllers
                 this.incidents.Update(incident);
             }
             this.incidents.Save();
-
+            TempData["message"] = $"{model.Name} was deleted.";
             technicians.Delete(technician);
             technicians.Save();
             return RedirectToAction("List");

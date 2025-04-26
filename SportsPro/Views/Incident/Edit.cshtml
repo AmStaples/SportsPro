@@ -16,7 +16,7 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="@Model.Incident.CustomerID" class="form-label">Customer</label>
-        <select asp-for="@Model.Incident.CustomerID" asp-items="@(new SelectList(Model.Customers, "CustomerID", "FullName"))" class="form-control">
+        <select my-select asp-for="@Model.Incident.CustomerID" my-list-items="@(new SelectList(Model.Customers, "CustomerID", "FullName"))" class="form-control">
             <option value="">-- Select a Customer --</option>
         </select>
     </div>
