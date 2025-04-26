@@ -1,0 +1,5 @@
+﻿@model ConfirmDeletionViewModel
+
+<input type="hidden" asp-for="Id" />
+<input type="hidden" asp-for="Name" />
+<p class="mb-3">Are you sure you want to delete "@Model.Name"?</p>

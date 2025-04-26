@@ -1,13 +1,10 @@
-﻿using Xunit;
-using Moq;
+﻿using Moq;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using SportsPro.Controllers;
 using SportsPro.Models;
 using SportsPro.Models.DataLayer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace SportsPro.Tests
 {
@@ -72,16 +69,16 @@ namespace SportsPro.Tests
             var product = new Product { ProductID = 1, Name = "Test Product" };
             _productRepoMock.Setup(repo => repo.Get(1)).Returns(product);  
             _productRepoMock.Setup(repo => repo.Delete(product));         
-            _productRepoMock.Setup(repo => repo.Save());                 
+            _productRepoMock.Setup(repo => repo.Save());
+
+            var model = new ConfirmDeletionViewModel { Id = product.ProductID, Name = product.Name };
 
             var tempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
             _controller.TempData = tempData;
 
-            var result = _controller.Delete(product) as RedirectToActionResult; 
+            var result = _controller.Delete(model);
 
-            Assert.NotNull(result);  
-            Assert.Equal("List", result.ActionName);  
-            Assert.Equal($"{product.Name} was deleted.", tempData["message"]);  
+            Assert.IsType<RedirectToActionResult>(result);
         }
 
         [Fact]

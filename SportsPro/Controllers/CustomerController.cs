@@ -100,9 +100,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(Customer customer)
+        public IActionResult Delete(ConfirmDeletionViewModel model)
         {
-            customer = customers.Get(customer.CustomerID ?? 0);
+            var customer = customers.Get(model.Id);
             if (customer == null) return NotFound();
             customers.Delete(customer);
             customers.Save();
