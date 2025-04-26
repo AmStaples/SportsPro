@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models.DataLayer;
 using Microsoft.AspNetCore.Http;
-using SportsPro.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace SportsPro
 {
@@ -34,6 +34,10 @@ namespace SportsPro
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SportsPro")));
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<SportsProContext>()
+                .AddDefaultTokenProviders();
+
             services.AddRouting(options => {
                 options.LowercaseUrls = true;
                 options.AppendTrailingSlash = true;
@@ -57,8 +61,17 @@ namespace SportsPro
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseSession();
+
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                ConfigureIdentity.CreateAdminUserAsync(scope.ServiceProvider).GetAwaiter().GetResult();
+            }
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

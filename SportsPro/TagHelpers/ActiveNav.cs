@@ -14,8 +14,14 @@ namespace SportsPro.TagHelpers
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             string controller = context.AllAttributes["asp-controller"].Value.ToString();
-            
-            if (controller == ViewCtx.RouteData.Values["controller"].ToString()) 
+
+            bool isValidAction = true;
+            if (controller == "Account")
+            {
+                isValidAction = (context.AllAttributes["asp-action"].Value.ToString() == ViewCtx.RouteData.Values["action"].ToString());
+            }
+
+            if (isValidAction && controller == ViewCtx.RouteData.Values["controller"].ToString()) 
             {
                 output.Attributes.AppendCssClass("text-white");
             } 
