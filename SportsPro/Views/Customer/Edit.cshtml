@@ -56,9 +56,7 @@
     <div class="form-group row">
         <label asp-for="CountryID" class="col-form-label col-md-2">Country</label>
         <div class="col-md-4">
-        <select asp-for="CountryID" asp-items="@(new SelectList(ViewBag.Countries, "CountryID", "Name"))" class="form-control">
-            <option value="">Pick a Country</option>
-        </select>
+        <select-list entity-type="country" selected-id="@Model.CountryID" asp-for="CountryID"></select-list>
         </div>
         <span asp-validation-for="CountryID" class="text-danger col-md-6"></span>
     </div>
