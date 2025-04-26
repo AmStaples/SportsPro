@@ -8,84 +8,67 @@ namespace SportsPro.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager<User> userManager;
-        private SignInManager<User> signInManager;
+        private UserManager<User> _userManager;
+        private SignInManager<User> _signInManager;
 
-        public AccountController(UserManager<User> userMngr, SignInManager<User> signInMngr)
-        {
-            userManager = userMngr;
-            signInManager = signInMngr;
-        }
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+            => (_userManager, _signInManager) = (userManager, signInManager);
 
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new User { UserName = model.Username };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
             {
-                var user = new User { UserName = model.Username };
-                var result = await userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
+
+                return View(model);
             }
-            return View(model);
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
         public IActionResult LogIn(string returnURL = "")
-        {
-            var model = new LoginViewModel { ReturnUrl = returnURL };
-            return View(model);
-        }
+            => View(new LoginViewModel { ReturnUrl = returnURL });
 
         [HttpPost]
         public async Task<IActionResult> LogIn(LoginViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: false);
+            if (!ModelState.IsValid)
+                return View(model);
 
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
+            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    return Redirect(model.ReturnUrl);
+                else
+                    return RedirectToAction("Index", "Home");
             }
+
             ModelState.AddModelError("", "Invalid username/password.");
             return View(model);
         }
 
-        public ViewResult AccessDenied()
-        {
-            return View();
-        }
+        public IActionResult AccessDenied() => View();
     }
 }
