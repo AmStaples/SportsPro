@@ -92,9 +92,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Technician technician)
+        public ActionResult Delete(ConfirmDeletionViewModel model)
         {
-            technician = technicians.Get(technician.TechnicianID);
+            var technician = technicians.Get(model.Id);
             if (technician == null)
             {
                 return NotFound();

@@ -146,9 +146,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Product product)
+        public ActionResult Delete(ConfirmDeletionViewModel model)
         {
-            product = _productRepository.Get(product.ProductID);
+            var product = _productRepository.Get(model.Id);
             if (product == null)
             {
                 return NotFound();

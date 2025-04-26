@@ -47,7 +47,7 @@ namespace SportsPro.Controllers
                 Incidents = incidents,
                 Filter = filter
             };
-
+            ViewBag.Filter = filter;
             return View(viewModel);
         }
 
@@ -136,9 +136,9 @@ namespace SportsPro.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Incident incident)
+        public ActionResult Delete(ConfirmDeletionViewModel model)
         {
-            incident = incidents.Get(incident.IncidentID);
+            var incident = incidents.Get(model.Id);
             if (incident == null)
             {
                 return NotFound();
