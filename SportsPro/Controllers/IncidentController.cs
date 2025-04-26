@@ -74,6 +74,7 @@ namespace SportsPro.Controllers
             {
                 incidents.Insert(incident);
                 incidents.Save();
+                TempData["message"] = $"{incident.Title} was added.";
                 return RedirectToAction("List");
             }
             else
@@ -112,6 +113,7 @@ namespace SportsPro.Controllers
             {
                 incidents.Update(incident);
                 incidents.Save();
+                TempData["message"] = $"{incident.Title} was edited.";
                 return RedirectToAction("List");
             }
             else
@@ -143,6 +145,7 @@ namespace SportsPro.Controllers
             }
             incidents.Delete(incident);
             incidents.Save();
+            TempData["message"] = $"{model.Name} was deleted.";
             return RedirectToAction("List");
         }
 

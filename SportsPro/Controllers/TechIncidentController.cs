@@ -143,7 +143,7 @@ namespace SportsPro.Controllers
 
             _incidentRepo.Update(incident);
             _incidentRepo.Save();
-
+            TempData["message"] = $"{model.Incident.Title} was edited.";
             int? techID = _session.GetInt32(Tech_ID);
             return RedirectToAction("List", new { id = techID });
         }

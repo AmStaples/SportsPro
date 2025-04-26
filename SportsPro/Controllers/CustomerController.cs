@@ -52,6 +52,7 @@ namespace SportsPro.Controllers
             {
                 customers.Insert(customer);
                 customers.Save();
+                TempData["message"] = $"{customer.FullName} was added.";
                 return RedirectToAction("List");
             }
             else
@@ -81,6 +82,7 @@ namespace SportsPro.Controllers
             {
                 customers.Update(customer);
                 customers.Save();
+                TempData["message"] = $"{customer.FullName} was edited.";
                 return RedirectToAction("List");
             }
             else
@@ -106,6 +108,7 @@ namespace SportsPro.Controllers
             if (customer == null) return NotFound();
             customers.Delete(customer);
             customers.Save();
+            TempData["message"] = $"{customer.FullName} was deleted.";
             return RedirectToAction("List");
         }
     }
